@@ -1,21 +1,25 @@
 package com.ipiecoles.java.audio.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 public class Artist {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="ArtistId")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
     private Long id;
 
-    @Column(name="Name")
+    @Column(name="name")
     private String name;
 
     @OneToMany(mappedBy = "artist")
+    @JsonIgnoreProperties("artist")
     private Set<Album> albums = new HashSet<>();
 
     public Long getId() {
@@ -43,11 +47,23 @@ public class Artist {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Artist)) return false;
+        Artist artist = (Artist) o;
+        return Objects.equals(id, artist.id) &&
+                Objects.equals(name, artist.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
+    }
+
+    @Override
     public String toString() {
         return "Artist{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", albums=" + albums +
-                '}';
+                ", name='" + name + "}";
     }
 }

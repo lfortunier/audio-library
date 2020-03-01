@@ -1,16 +1,17 @@
 package com.ipiecoles.java.audio.model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class Album {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="AlbumId")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
     private Long id;
 
-    @Column(name="Title")
+    @Column(name="title")
     private String title;
 
     @ManyToOne
@@ -39,6 +40,21 @@ public class Album {
 
     public void setArtist(Artist artist) {
         this.artist = artist;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Album)) return false;
+        Album album = (Album) o;
+        return Objects.equals(id, album.id) &&
+                Objects.equals(title, album.title) &&
+                Objects.equals(artist, album.artist);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, artist);
     }
 
     @Override
